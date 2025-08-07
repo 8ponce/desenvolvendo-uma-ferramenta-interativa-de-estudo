@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="pr-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>flashcard</title>
-</head>
-<body>
-    
-</body>
-</html>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +14,7 @@
     </header>
 
     <section id="quiz-container">
-        <h2>Quiz de Exemplo</h2>
+        <h2>Quiz de Geografia - Teste seus Conhecimentos!</h2>
         <div id="quiz">
             <p id="question">Qual é a capital do Brasil?</p>
             <div class="answers">
@@ -35,6 +25,9 @@
             </div>
         </div>
         <div id="feedback"></div>
+        <div id="next-button" style="display:none;">
+            <button onclick="nextQuestion()">Próxima Pergunta</button>
+        </div>
     </section>
 
     <footer>
@@ -44,7 +37,7 @@
     <script src="script.js"></script>
 </body>
 </html>
-2. CSS (Estilo visual)
+2. CSS (Estilo Visual)
 /* styles.css */
 body {
     font-family: Arial, sans-serif;
@@ -101,12 +94,69 @@ footer {
     font-size: 0.9em;
     color: #777;
 }
-3. JavaScript (Interatividade)
+
+#next-button {
+    margin-top: 20px;
+}
+3. JavaScript (Interatividade com Respostas e Navegação)
 // script.js
 
-// Função para verificar a resposta
+// Perguntas do Quiz
+const questions = [
+    {
+        question: "Qual é a capital do Brasil?",
+        answers: {
+            A: "Rio de Janeiro",
+            B: "São Paulo",
+            C: "Brasília",
+            D: "Belo Horizonte"
+        },
+        correctAnswer: "C"
+    },
+    {
+        question: "Qual é o maior país do mundo?",
+        answers: {
+            A: "Estados Unidos",
+            B: "Brasil",
+            C: "China",
+            D: "Rússia"
+        },
+        correctAnswer: "D"
+    },
+    {
+        question: "Qual é o oceano mais profundo?",
+        answers: {
+            A: "Atlântico",
+            B: "Índico",
+            C: "Ártico",
+            D: "Pacífico"
+        },
+        correctAnswer: "D"
+    }
+];
+
+let currentQuestionIndex = 0;
+
+// Exibe a pergunta e as respostas
+function displayQuestion() {
+    const question = questions[currentQuestionIndex];
+    document.getElementById('question').textContent = question.question;
+    const buttons = document.querySelectorAll('.answer');
+    const answers = question.answers;
+    
+    let i = 0;
+    for (const key in answers) {
+        buttons[i].textContent = `${key}) ${answers[key]}`;
+        i++;
+    }
+    
+    document.getElementById('feedback').textContent = '';
+    document.getElementById('next-button').style.display = 'none';
+}
+
+// Verifica a resposta
 function checkAnswer(answer) {
-    const correctAnswer = 'C'; // Resposta correta
+    const correctAnswer = questions[currentQuestionIndex].correctAnswer;
     const feedback = document.getElementById('feedback');
     
     if (answer === correctAnswer) {
@@ -116,4 +166,20 @@ function checkAnswer(answer) {
         feedback.textContent = 'Resposta Errada! Tente novamente.';
         feedback.style.color = 'red';
     }
+    
+    document.getElementById('next-button').style.display = 'block';
 }
+
+// Avança para a próxima pergunta
+function nextQuestion() {
+    currentQuestionIndex++;
+    
+    if (currentQuestionIndex < questions.length) {
+        displayQuestion();
+    } else {
+        document.getElementById('quiz-container').innerHTML = `<h2>Quiz Finalizado! Parabéns por completar o teste!</h2>`;
+    }
+}
+
+// Inicializa o Quiz
+displayQuestion();
